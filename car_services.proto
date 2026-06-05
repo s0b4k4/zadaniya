@@ -1,0 +1,130 @@
+syntax = "proto3";
+
+package car.v1;
+option go_package = "github.com/course/tasks/api/car/v1;carv1";
+
+import "google/api/annotations.proto";
+import "car.proto";
+
+service ConveyorService {
+  rpc AssembleCar(AssembleCarRequest) returns (AssembleCarResponse) {
+    option (google.api.http) = {
+      post: "/v1/conveyor/assemble"
+      body: "*"
+    };
+  }
+
+  rpc GetCarSpec(GetCarSpecRequest) returns (GetCarSpecResponse) {
+    option (google.api.http) = {
+      get: "/v1/conveyor/cars/{vin}/spec"
+    };
+  }
+}
+
+message AssembleCarRequest {
+  string vin = 1;
+  int32 engine_id = 2;
+  int32 transmission_id = 3;
+}
+
+message AssembleCarResponse {
+  bool success = 1;
+}
+
+message EngineSpec {
+  string model = 1;
+  int32 horsepower = 2;
+}
+
+message TransmissionSpec {
+  string type = 1;
+}
+
+message GetCarSpecRequest {
+  string vin = 1;
+}
+
+message GetCarSpecResponse {
+  Car car = 1;
+  EngineSpec engine = 2;
+  TransmissionSpec transmission = 3;
+}
+
+// Task 6
+service DashboardService {
+  rpc GetOwnerDashboard(GetOwnerDashboardRequest) returns (GetOwnerDashboardResponse) {
+    option (google.api.http) = {
+      get: "/v1/owners/{owner_id}/dashboard"
+    };
+  }
+}
+
+message GetOwnerDashboardRequest {
+  int32 owner_id = 1;
+}
+
+message DashboardCar {
+  string vin = 1;
+  string brand = 2;
+  string last_service_date = 3;
+  string service_description = 4;
+}
+
+message GetOwnerDashboardResponse {
+  int32 owner_id = 1;
+  string owner_name = 2;
+  repeated DashboardCar cars = 3;
+}
+
+// Task 8
+service BookingService {
+  rpc CreateBooking(CreateBookingRequest) returns (CreateBookingResponse) {
+    option (google.api.http) = {
+      post: "/v1/bookings"
+      body: "*"
+    };
+  }
+  
+  rpc CheckAvailability(CheckAvailabilityRequest) returns (CheckAvailabilityResponse) {
+    option (google.api.http) = {
+      get: "/v1/bookings/availability"
+    };
+  }
+}
+
+message CreateBookingRequest {
+  string car_vin = 1;
+  string start_date = 2;
+  string end_date = 3;
+}
+
+message CreateBookingResponse {
+  int32 booking_id = 1;
+  bool success = 2;
+}
+
+message CheckAvailabilityRequest {
+  string car_vin = 1;
+  string start_date = 2;
+  string end_date = 3;
+}
+
+message CheckAvailabilityResponse {
+  bool available = 1;
+}
+
+// Task 10
+service MaintenanceService {
+  rpc ExportWorkOrders(ExportWorkOrdersRequest) returns (ExportWorkOrdersResponse) {
+    option (google.api.http) = {
+      get: "/v1/maintenance/export"
+    };
+  }
+}
+
+message ExportWorkOrdersRequest {}
+
+message ExportWorkOrdersResponse {
+  string file_url = 1;
+  bytes file_content = 2;
+}

@@ -1,0 +1,21 @@
+syntax = "proto3";
+package documents;
+option go_package = "github.com/course/tasks/pkg/documents_v1";
+
+message User {
+    int64 id = 1;
+    string name = 2;
+}
+
+message Document {
+    int64 id = 1;
+    string title = 2;
+    int64 user_id = 3;
+}
+
+message AddDocumentRequest { Document doc = 1; }
+message AddDocumentResponse { bool success = 1; }
+
+service DocumentService {
+    rpc AddDocumentToUser(AddDocumentRequest) returns (AddDocumentResponse);
+}

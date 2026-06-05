@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package warehouse.v1;
+option go_package = "github.com/course/tasks/api/warehouse/v1;warehousev1";
+
+import "google/api/annotations.proto";
+
+service WarehouseService {
+  rpc CreateOrder(CreateOrderRequest) returns (CreateOrderResponse) {
+    option (google.api.http) = {
+      post: "/v1/orders"
+      body: "*"
+    };
+  }
+
+  rpc GetOrderStatus(GetOrderStatusRequest) returns (GetOrderStatusResponse) {
+    option (google.api.http) = {
+      get: "/v1/orders/{order_id}/status"
+    };
+  }
+}
+
+message CreateOrderRequest {
+  int32 product_id = 1;
+  int32 quantity = 2;
+}
+
+message CreateOrderResponse {
+  int32 order_id = 1;
+  string status = 2;
+}
+
+message GetOrderStatusRequest {
+  int32 order_id = 1;
+}
+
+message GetOrderStatusResponse {
+  int32 order_id = 1;
+  string status = 2;
+}

@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package telemetry.v1;
+option go_package = "github.com/course/tasks/api/telemetry/v1;telemetryv1";
+
+import "google/api/annotations.proto";
+
+service TelemetryService {
+  rpc TelemetryStream(stream Signal) returns (stream Alert);
+
+  rpc GetAlertLogs(GetAlertLogsRequest) returns (GetAlertLogsResponse) {
+    option (google.api.http) = {
+      get: "/v1/telemetry/alerts"
+    };
+  }
+}
+
+message Signal {
+  string vin = 1;
+  int32 speed = 2;
+  int32 rpm = 3;
+}
+
+message Alert {
+  string vin = 1;
+  string message = 2;
+  string timestamp = 3;
+}
+
+message GetAlertLogsRequest {
+  string vin = 1;
+  string since = 2;
+}
+
+message GetAlertLogsResponse {
+  repeated Alert alerts = 1;
+}
