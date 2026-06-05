@@ -1,0 +1,16 @@
+syntax = "proto3";
+package telemetry;
+option go_package = "github.com/course/tasks/pkg/telemetry_v1";
+
+message Signal {
+    int32 speed = 1;
+    int32 rpm = 2;
+}
+
+message Alert {
+    string message = 1;
+}
+
+service TelemetryService {
+    rpc TelemetryStream(stream Signal) returns (stream Alert);
+}

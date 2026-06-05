@@ -1,0 +1,13 @@
+syntax = "proto3";
+package smarthome;
+option go_package = "github.com/course/tasks/pkg/smarthome_v1";
+
+message MonitorRequest { string device_id = 1; }
+message Reading { 
+    string device_id = 1;
+    float temperature = 2; 
+}
+
+service SmartHome {
+    rpc MonitorReadings(MonitorRequest) returns (stream Reading);
+}
